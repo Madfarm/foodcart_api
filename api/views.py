@@ -7,8 +7,9 @@ from .serializers import MenuItemSerializer
 @api_view(['GET' ,'POST'])
 def menuItemList(request):
     if request.method == "GET":
-            MenuItems = MenuItem.objects.all()
-            serializer = MenuItemSerializer(MenuItems, many=True)
+        MenuItems = MenuItem.objects.all()
+        serializer = MenuItemSerializer(MenuItems, many=True)
+
     elif request.method == 'POST':
         serializer = MenuItemSerializer(data=request.data)
         if serializer.is_valid():
@@ -18,8 +19,14 @@ def menuItemList(request):
     return Response(serializer.data)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'DELETE'])
 def getMenuItem(request, pk):
-    data = MenuItem.objects.get(id=pk)
-    serializer = MenuItemSerializer(data, many=False)
-    return Response(serializer.data)
+    if request.method == 'DELETE':
+        data = MenuItem.objects.get(id=pk)
+        data.delete()
+        return Response("Item deleted successfully")
+    
+    elif request.method == 'GET':
+        data = MenuItem.objects.get(id=pk)
+        serializer = MenuItemSerializer(data, many=False)
+        return Response(serializer.data)
