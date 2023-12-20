@@ -19,7 +19,7 @@ def menuItemList(request):
     return Response(serializer.data)
 
 
-@api_view(['GET', 'DELETE'])
+@api_view(['GET', 'DELETE', 'PUT'])
 def getMenuItem(request, pk):
     if request.method == 'DELETE':
         data = MenuItem.objects.get(id=pk)
@@ -29,4 +29,11 @@ def getMenuItem(request, pk):
     elif request.method == 'GET':
         data = MenuItem.objects.get(id=pk)
         serializer = MenuItemSerializer(data, many=False)
+        return Response(serializer.data)
+    
+    elif request.method == 'PUT':
+        data = MenuItem.objects.get(id=pk)
+        serializer = MenuItemSerializer(instance=data, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
         return Response(serializer.data)
