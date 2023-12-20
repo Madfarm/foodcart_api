@@ -6,5 +6,6 @@ from .serializers import MenuItemSerializer
 
 @api_view(['GET'])
 def getData(request):
-    foodCart = {'melon': 3, 'apple': 5, 'banana': 7}
-    return Response(foodCart)
+    MenuItems = MenuItem.objects.all()
+    serializer = MenuItemSerializer(MenuItems, many=True)
+    return Response(serializer.data)
