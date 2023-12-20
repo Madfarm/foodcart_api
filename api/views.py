@@ -16,3 +16,9 @@ def createMenuItem(request):
     if serializer.is_valid():
         serializer.save()
     return Response(serializer.data)
+
+@api_view(['GET'])
+def getMenuItem(request, pk):
+    data = MenuItem.objects.get(id=pk)
+    serializer = MenuItemSerializer(data, many=False)
+    return Response(serializer.data)
